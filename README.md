@@ -8,7 +8,7 @@ This class library enables a PI java program to get a session key from an applic
 
 Factory methods are provided to create an object that will perform the work of getting the session key, or logging off and handling the placement of that session key in the web service message.
 
-### Example implementations provided
+### Implementations provided
  - SessionMessageIdentityImpl - Get a session id and then just copy the input payload to the output and log the determined session key as a dynamic configuration attribute.
  - SessionMessagePayloadImpl - Get a session id and then set it into a specified payload field.
  - SessionMessageAddToPayloadImpl - Get a session id and then add it as a new payload field.
@@ -57,6 +57,9 @@ loginXxml - This is a string containing the XML payload to use for the logon cal
 sessionIdField - This is the name of the fielt where the session id will be placed for the SET\_FIELD type or alternatively it is the name of an adjacent (sibling) field where you want the NEW field added in the ADD\_FIELD type.
 newSessionIdField - This is the name of the new fields to create for the ADD\_FIELD type and it is to contain and node and value string when using the SOAP_HEADER type like such: "node/element".
 sessionIdResponseField - This is the field to search for in the logon response where the session id will be returned.
+
+
+See the PI_GetSessionKeyMapping repo for example PI java mappings using this library.
 
 ### Contributions
 Please ensure that any code changes or additional template pattern implementations are covered by unit tests. This project uses JUnit and Mockito.
