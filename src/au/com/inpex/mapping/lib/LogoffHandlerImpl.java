@@ -1,6 +1,7 @@
 package au.com.inpex.mapping.lib;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -67,12 +68,14 @@ public class LogoffHandlerImpl extends SessionMessage {
 	@Override
 	protected Payload setRequestPayload() {
 		String sessionId = dynConfig.get();
+		ByteArrayOutputStream requestPayloadOutputStream = new ByteArrayOutputStream();
+		
 		
 		//Put the session-id into the xml payload
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder builder = docFactory.newDocumentBuilder();
-			Document document = builder.parse(messageInputstream);
+			Document document = builder.parse(new ByteArrayInputStream(loginXml.getBytes()));
 			NodeList nodes = document.getElementsByTagName(this.sessionIdFieldName);
 			
 			if (nodes.getLength() == 0) {
@@ -87,14 +90,16 @@ public class LogoffHandlerImpl extends SessionMessage {
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 			
-			StreamResult streamResult = new StreamResult(this.messageOutputStream);
+			StreamResult streamResult = new StreamResult(requestPayloadOutputStream);
 			transformer.transform(source, streamResult);
+			
 			
 		} catch (Exception e) {
 			throw new BuildMessagePayloadException(e.getMessage());
 		}
 		
-		InputStream is = new ByteArrayInputStream(this.loginXml.getBytes());
+		
+		InputStream is = new ByteArrayInputStream(requestPayloadOutputStream.toByteArray());
 		Payload payload = LookupService.getXmlPayload(is);
 		
 		return payload;
