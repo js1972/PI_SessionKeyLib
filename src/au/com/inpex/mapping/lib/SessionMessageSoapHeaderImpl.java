@@ -81,9 +81,21 @@ public class SessionMessageSoapHeaderImpl extends SessionMessage {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder builder = docFactory.newDocumentBuilder();
-			Document document;
-			document = builder.parse(is);
-			NodeList nodes = document.getElementsByTagName(this.sessionKeyResponseFieldName);
+			Document document = builder.parse(is);
+			
+			NodeList nodes = document.getElementsByTagNameNS("*", this.sessionKeyResponseFieldName);
+			if (nodes.getLength() == 0) {
+				nodes = document.getElementsByTagName(this.sessionKeyResponseFieldName);
+				if (nodes.getLength() == 0) {
+					throw new SessionKeyResponseException(
+						"Unable to find field: '" + 
+						this.sessionKeyResponseFieldName + 
+						"' in response! Web Service Response:\n\n" +
+						getXmlDocAsString(document)
+					);
+				}
+			}
+			
 			Node node = nodes.item(0);
 			
 			if (node != null) {
@@ -92,6 +104,7 @@ public class SessionMessageSoapHeaderImpl extends SessionMessage {
 					sessionId = node.getNodeValue();
 				}
 			}
+			
 			
 		} catch (Exception e) {
 			throw new SessionKeyResponseException(e.getMessage());
@@ -124,7 +137,7 @@ public class SessionMessageSoapHeaderImpl extends SessionMessage {
 				transformer.transform(source, streamResult);
 				
 			} catch (Exception e) {
-				throw new BuildMessagePayloadException(e.getMessage());
+				throw new BuildMessagePayloadException("Session Id: '" + sessionId + "' - " + e.getMessage());
 			}
 			
 			//Wrap payload in soap envelope/header
@@ -138,8 +151,7 @@ public class SessionMessageSoapHeaderImpl extends SessionMessage {
 			this.messageOutputStream.write(envelope.getBytes());
 			
 		} catch (IOException e) {
-			throw new BuildMessagePayloadException(e.getMessage());
+			throw new BuildMessagePayloadException("Session Id: '" + sessionId + "' - " + e.getMessage());
 		}
 	}
-
 }

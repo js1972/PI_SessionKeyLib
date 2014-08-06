@@ -70,7 +70,20 @@ public class SessionMessagePayloadImpl extends SessionMessage {
 			DocumentBuilder builder = docFactory.newDocumentBuilder();
 			Document document;
 			document = builder.parse(is);
-			NodeList nodes = document.getElementsByTagName(this.sessionKeyResponseFieldName);
+			
+			NodeList nodes = document.getElementsByTagNameNS("*", this.sessionKeyResponseFieldName);
+			if (nodes.getLength() == 0) {
+				nodes = document.getElementsByTagName(this.sessionKeyResponseFieldName);
+				if (nodes.getLength() == 0) {
+					throw new SessionKeyResponseException(
+						"Unable to find field: '" + 
+						this.sessionKeyResponseFieldName + 
+						"' in response! Web Service Response:\n\n" +
+						getXmlDocAsString(document)
+					);
+				}
+			}
+			
 			Node node = nodes.item(0);
 			
 			if (node != null) {

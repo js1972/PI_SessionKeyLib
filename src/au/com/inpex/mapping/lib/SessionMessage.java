@@ -3,6 +3,17 @@ package au.com.inpex.mapping.lib;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
 
 import com.sap.aii.mapping.api.AbstractTrace;
 import com.sap.aii.mapping.api.TransformationInput;
@@ -76,6 +87,35 @@ public abstract class SessionMessage {
 			logger.addInfo(msg);
 		}
 		catch (Exception e) { }
+	}
+	
+	/**
+	 * Utility method to extract an XML document as a string
+	 * @param d XML document (org.w3c.dom.Document)
+	 * @return Indented string representation of the XML document
+	 */
+	String getXmlDocAsString(Document d) {
+		TransformerFactory transfac = TransformerFactory.newInstance();
+		Transformer trans;
+		try {
+			trans = transfac.newTransformer();
+		} catch (TransformerConfigurationException e) {
+			return "Unable to create java TransformerFactory. Cannot display XML!";
+		}
+		trans.setOutputProperty(OutputKeys.METHOD, "xml");
+		trans.setOutputProperty(OutputKeys.INDENT, "yes");
+		trans.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", Integer.toString(2));
+
+		StringWriter sw = new StringWriter();
+		StreamResult result = new StreamResult(sw);
+		DOMSource source = new DOMSource(d.getDocumentElement());
+
+		try {
+			trans.transform(source, result);
+		} catch (TransformerException e) {
+			return "Unable to transform document with java XML transformer. Cannot display XML!";
+		}
+		return sw.toString();
 	}
 	
 	/**
