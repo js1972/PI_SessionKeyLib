@@ -117,6 +117,7 @@ public class SessionMessageSoapHeaderImpl extends SessionMessage {
 	 * Copy input to output then wrap it in a soap envelope with
 	 * the session Id in the soap header.
 	 * Note: requires comm.channel to be in 'nosoap' mode.
+	 * Note: need to use a transformer so that we can get rid of the xml tag.
 	 */
 	@Override
 	protected void buildMessage(String sessionId) {		

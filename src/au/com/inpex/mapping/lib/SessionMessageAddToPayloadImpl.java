@@ -106,7 +106,10 @@ public class SessionMessageAddToPayloadImpl extends SessionMessage {
 		try {
 			DocumentBuilder builder = docFactory.newDocumentBuilder();
 			Document document = builder.parse(this.messageInputstream);
-			NodeList nodes = document.getElementsByTagName(this.sessionIdFieldName);
+			NodeList nodes = document.getElementsByTagNameNS("*", this.sessionIdFieldName);
+			if (nodes.getLength() == 0) {
+				nodes = document.getElementsByTagName(this.sessionIdFieldName);
+			}
 			
 			Element sessionIdElement = document.createElement(this.newSessionIdFieldName);
 			sessionIdElement.appendChild(document.createTextNode(sessionId));

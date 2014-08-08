@@ -76,7 +76,10 @@ public class LogoffHandlerImpl extends SessionMessage {
 		try {
 			DocumentBuilder builder = docFactory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(loginXml.getBytes()));
-			NodeList nodes = document.getElementsByTagName(this.sessionIdFieldName);
+			NodeList nodes = document.getElementsByTagNameNS("*", this.sessionIdFieldName);
+			if (nodes.getLength() == 0) {
+				nodes = document.getElementsByTagName(this.sessionIdFieldName);
+			}
 			
 			if (nodes.getLength() == 0) {
 				logInfo(this.sessionIdFieldName + " element not found!");
