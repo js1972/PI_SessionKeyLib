@@ -40,7 +40,8 @@ String loginXml = "<SessionKeyRequest xmlns=\"urn:pi:session:key\"><data>session
 				loginXml,
 				sessionIdField,
 				newSessionIdField,
-				sessionIdResponseField);
+				sessionIdResponseField,
+				true); /* namespaceAware param */
 			
 			sessionMessageHandler.process();
 ```
@@ -69,5 +70,6 @@ __newSessionIdField__ - This is the name of the new fields to create for the ADD
 
 __sessionIdResponseField__ - This is the field to search for in the logon response where the session id will be returned.
 
+__namespaceAware__ - This parameter enables (or disables) the XML document factory to be namesapce aware via ```docFactory.setNamespaceAware(this.namespaceAware);```. Sometimes when field-level namespaces are used; the getElementsByTagNameNS() and getElementsByTagName() methods cannot find an element. By setting this parameter to true, the elements will be found. This searching for elements is performed in the logic to find the session_id in the login()/logoff() web service responses and also to find the location to add the session id in the main message payload.
 
 See the PI_GetSessionKeyMapping repo for example PI java mappings using this library.
