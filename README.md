@@ -45,21 +45,29 @@ String loginXml = "<SessionKeyRequest xmlns=\"urn:pi:session:key\"><data>session
 			sessionMessageHandler.process();
 ```
 
-mappingType - ADD\_FIELD, SET\_FIELD, SOAP\_HEADER. All other values create the identity instance.
-inputHandler - This is the TransformationInput object as provided to the PI mapping program.
-outputHandler - This is the TransformationOutput object as provided to the PI mapping program.
-businessComponentName - this is the business component that holds the communication channels in PI used for logon and logoff service calls.
-channelName - This is the communication channel name used for the logon service call to get the session id.
-dcNamespace - This is the namespace to use for the created dynamic configuration attribute.
-dcKey - This is the name of the dynamic configuration attribute to create for the session id.
-getTrace() - This is just the trace object as provided to the PI java mapping.
-loginXxml - This is a string containing the XML payload to use for the logon call.
-sessionIdField - This is the name of the fielt where the session id will be placed for the SET\_FIELD type or alternatively it is the name of an adjacent (sibling) field where you want the NEW field added in the ADD\_FIELD type.
-newSessionIdField - This is the name of the new fields to create for the ADD\_FIELD type and it is to contain and node and value string when using the SOAP_HEADER type like such: "node/element".
-sessionIdResponseField - This is the field to search for in the logon response where the session id will be returned.
+__mappingType__ - ADD\_FIELD, SET\_FIELD, SOAP\_HEADER. All other values create the identity instance.
+
+__inputHandler__ - This is the TransformationInput object as provided to the PI mapping program.
+
+__outputHandler__ - This is the TransformationOutput object as provided to the PI mapping program.
+
+__businessComponentName__ - this is the business component that holds the communication channels in PI used for logon and logoff service calls.
+
+__channelName__ - This is the communication channel name used for the logon service call to get the session id.
+
+__dcNamespace__ - This is the namespace to use for the created dynamic configuration attribute.
+
+__dcKey__ - This is the name of the dynamic configuration attribute to create for the session id.
+
+__getTrace()__ - This is just the trace object as provided to the PI java mapping.
+
+__loginXml__ - This is a string containing the XML payload to use for the logon call.
+
+__sessionIdField__ - This is the name of the fielt where the session id will be placed for the SET\_FIELD type or alternatively it is the name of an adjacent (sibling) field where you want the NEW field added in the ADD\_FIELD type.
+
+__newSessionIdField__ - This is the name of the new fields to create for the ADD\_FIELD type and it is to contain and node and value string when using the SOAP_HEADER type like such: "node/element".
+
+__sessionIdResponseField__ - This is the field to search for in the logon response where the session id will be returned.
 
 
 See the PI_GetSessionKeyMapping repo for example PI java mappings using this library.
-
-### Contributions
-Please ensure that any code changes or additional template pattern implementations are covered by unit tests. This project uses JUnit and Mockito.
