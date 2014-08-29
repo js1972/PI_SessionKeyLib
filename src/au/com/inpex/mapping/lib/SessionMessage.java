@@ -30,6 +30,7 @@ public abstract class SessionMessage {
 	protected OutputStream messageOutputStream;
 	protected CommunicationChannel commChannel;
 	protected String loginXml = "";
+	protected boolean namespaceAware = false;
 
 	
 	SessionMessage(
@@ -39,10 +40,12 @@ public abstract class SessionMessage {
 		String channelName,
 		AsmaParameter dc,
 		AbstractTrace trace,
-		String payloadXml) {
+		String payloadXml,
+		boolean namespaceAware) {
 		
 		this.logger = trace;
 		this.dynConfig = dc;
+		this.namespaceAware = (namespaceAware == true)? true : false;
 		this.messageInputstream = in.getInputPayload().getInputStream();
 		this.messageOutputStream = out.getOutputPayload().getOutputStream();
 		this.loginXml = payloadXml;
@@ -51,6 +54,10 @@ public abstract class SessionMessage {
 			businessComponentName,
 			channelName
 		);
+		
+		logDebug("Begin Session message processing with loginXml: " + loginXml);
+		logDebug("businessComponentName: " + businessComponentName);
+		logDebug("channelName: " + channelName);
 	}
 	
 	/**
@@ -59,7 +66,7 @@ public abstract class SessionMessage {
 	 */
 	public final void process() throws LookupException {
 		Payload payload = setRequestPayload();
-		Payload response = callSessionKeyWebService(payload);
+		Payload response = callSessionKeyWebService(payload);		
 		String sessionId = getSessionKeyFromResponse(response);
 		buildMessage(sessionId);
 		
@@ -85,6 +92,13 @@ public abstract class SessionMessage {
 	protected void logInfo(String msg) {
 		try {
 			logger.addInfo(msg);
+		}
+		catch (Exception e) { }
+	}
+	
+	protected void logDebug(String msg) {
+		try {
+			logger.addDebugMessage(msg);
 		}
 		catch (Exception e) { }
 	}

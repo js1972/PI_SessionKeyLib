@@ -57,9 +57,10 @@ public class LogoffHandlerImpl extends SessionMessage {
 		AsmaParameter dc,
 		AbstractTrace trace,
 		String payloadXml,
-		String sessionIdField) {
+		String sessionIdField,
+		boolean namespaceAware) {
 		
-		super(in, out, businessComponentName, channelName, dc, trace, payloadXml);
+		super(in, out, businessComponentName, channelName, dc, trace, payloadXml, namespaceAware);
 		this.dynConfig = dc;
 		this.loginXml = payloadXml;
 		this.sessionIdFieldName = sessionIdField;
@@ -73,6 +74,8 @@ public class LogoffHandlerImpl extends SessionMessage {
 		
 		//Put the session-id into the xml payload
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		docFactory.setNamespaceAware(this.namespaceAware);
+		
 		try {
 			DocumentBuilder builder = docFactory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(loginXml.getBytes()));

@@ -17,7 +17,8 @@ public interface SessionMessageFactory {
 		String payloadXml,
 		String sessionIdField,
 		String newSessionIdField,
-		String sessionIdResponseField
+		String sessionIdResponseField,
+		boolean namespaceAware
 	);
 	
 	public SessionMessage createLogoffHandler(
@@ -29,5 +30,7 @@ public interface SessionMessageFactory {
 		String dcKey,
 		AbstractTrace trace,
 		String payloadXml,
-		String sessionIdField);
+		String sessionIdField,
+		boolean namespaceAware
+	);
 }

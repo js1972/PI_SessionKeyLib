@@ -35,7 +35,8 @@ public class SessionMessageFactoryImpl implements SessionMessageFactory {
 		String payloadXml,
 		String sessionIdField,
 		String newSessionIdField,
-		String sessionIdResponseField) {
+		String sessionIdResponseField,
+		boolean namespaceAware) {
 		
 		AsmaParameter dc = new AsmaParameterImpl(in, dcNamespace, dcKey);
 		
@@ -49,7 +50,8 @@ public class SessionMessageFactoryImpl implements SessionMessageFactory {
 				trace,
 				payloadXml,
 				sessionIdField,
-				sessionIdResponseField);
+				sessionIdResponseField,
+				namespaceAware);
 			
 		} else if (type.equals("ADD_FIELD")) {
 			return new SessionMessageAddToPayloadImpl(
@@ -62,7 +64,8 @@ public class SessionMessageFactoryImpl implements SessionMessageFactory {
 				payloadXml,
 				sessionIdField,
 				newSessionIdField,
-				sessionIdResponseField);
+				sessionIdResponseField,
+				namespaceAware);
 			
 		} else if (type.equals("SOAP_HEADER")) {
 			return new SessionMessageSoapHeaderImpl(
@@ -74,7 +77,8 @@ public class SessionMessageFactoryImpl implements SessionMessageFactory {
 				trace,
 				payloadXml,
 				newSessionIdField,
-				sessionIdResponseField);
+				sessionIdResponseField,
+				namespaceAware);
 			
 		} else {
 			return new SessionMessageIdentityImpl(
@@ -85,7 +89,8 @@ public class SessionMessageFactoryImpl implements SessionMessageFactory {
 				dc,
 				trace,
 				payloadXml,
-				newSessionIdField);
+				newSessionIdField,
+				namespaceAware);
 		}
 	}
 
@@ -98,7 +103,8 @@ public class SessionMessageFactoryImpl implements SessionMessageFactory {
 		String dcKey,
 		AbstractTrace trace,
 		String payloadXml,
-		String sessionIdField) {
+		String sessionIdField,
+		boolean namespaceAware) {
 		
 		AsmaParameter dc = new AsmaParameterImpl(in, dcNamespace, dcKey);
 		
@@ -110,6 +116,7 @@ public class SessionMessageFactoryImpl implements SessionMessageFactory {
 			dc,
 			trace,
 			payloadXml,
-			sessionIdField);
+			sessionIdField,
+			namespaceAware);
 	}
 }

@@ -40,9 +40,10 @@ public class SessionMessageIdentityImpl extends SessionMessage {
 		AsmaParameter dc,
 		AbstractTrace trace,
 		String payloadXml,
-		String sessionIdResponseField) {
+		String sessionIdResponseField,
+		boolean namespaceAware) {
 		
-		super(in, out, businessComponentName, channelName, dc, trace, payloadXml);
+		super(in, out, businessComponentName, channelName, dc, trace, payloadXml, namespaceAware);
 		
 		if (sessionIdResponseField == null || sessionIdResponseField.equals("")) {
 			throw new SessionKeyResponseException("No session id response field name specified!");
@@ -65,6 +66,8 @@ public class SessionMessageIdentityImpl extends SessionMessage {
 		
 		InputStream is = response.getContent();
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		docFactory.setNamespaceAware(this.namespaceAware);
+		
 		try {
 			DocumentBuilder builder = docFactory.newDocumentBuilder();
 			Document document = builder.parse(is);

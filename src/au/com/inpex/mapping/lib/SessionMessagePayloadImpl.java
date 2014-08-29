@@ -44,10 +44,11 @@ public class SessionMessagePayloadImpl extends SessionMessage {
 		AbstractTrace trace,
 		String payloadXml,
 		String sessionIdField,
-		String sessionIdResponseField) {
+		String sessionIdResponseField,
+		boolean namespaceAware) {
 		
 		
-		super(in, out, businessComponentName, channelName, dc, trace, payloadXml);
+		super(in, out, businessComponentName, channelName, dc, trace, payloadXml, namespaceAware);
 		
 		if (sessionIdField == null || sessionIdField.equals("")) {
 			throw new BuildMessagePayloadException("No session id field name specified!");
@@ -66,6 +67,8 @@ public class SessionMessagePayloadImpl extends SessionMessage {
 		
 		InputStream is = response.getContent();
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		docFactory.setNamespaceAware(this.namespaceAware);
+		
 		try {
 			DocumentBuilder builder = docFactory.newDocumentBuilder();
 			Document document;
@@ -106,9 +109,11 @@ public class SessionMessagePayloadImpl extends SessionMessage {
 	 */
 	@Override
 	protected void buildMessage(String sessionId) {
-		logInfo("Building message with sessionId: " + sessionId);
+		logDebug("Building message with sessionId: " + sessionId);
 		
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		docFactory.setNamespaceAware(this.namespaceAware);
+		
 		try {
 			DocumentBuilder builder = docFactory.newDocumentBuilder();
 			Document document = builder.parse(this.messageInputstream);

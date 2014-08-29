@@ -58,9 +58,10 @@ public class SessionMessageSoapHeaderImpl extends SessionMessage {
 		AbstractTrace trace,
 		String payloadXml,
 		String newSessionIdField,
-		String sessionIdResponseField) {
+		String sessionIdResponseField,
+		boolean namespaceAware) {
 		
-		super(in, out, businessComponentName, channelName, dc, trace, payloadXml);
+		super(in, out, businessComponentName, channelName, dc, trace, payloadXml, namespaceAware);
 		
 		try {
 			this.nodeName = newSessionIdField.split("/")[0];
@@ -79,6 +80,8 @@ public class SessionMessageSoapHeaderImpl extends SessionMessage {
 		
 		InputStream is = response.getContent();
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		docFactory.setNamespaceAware(this.namespaceAware);
+		
 		try {
 			DocumentBuilder builder = docFactory.newDocumentBuilder();
 			Document document = builder.parse(is);
@@ -123,6 +126,8 @@ public class SessionMessageSoapHeaderImpl extends SessionMessage {
 	protected void buildMessage(String sessionId) {		
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			docFactory.setNamespaceAware(this.namespaceAware);
+			
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			
 			try {
